@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+
+# Environment variables
+.env
+
+# SSL certificates
+*.pem
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
