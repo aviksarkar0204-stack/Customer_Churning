@@ -7,6 +7,7 @@ A machine learning project that predicts customer churn for a telecom company us
 ## Demo
 
 Upload a CSV of customer data and get instant churn predictions with probabilities and a downloadable results file.
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://customerchurning-hufw47y3ucayv8vxzzxs8f.streamlit.app/)
 
 ---
 
