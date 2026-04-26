@@ -1,6 +1,6 @@
 # Customer Churn Predictor
 
-A machine learning project that predicts customer churn for a telecom company using the IBM Telco Customer Churn dataset. The project covers the full ML pipeline — from EDA and preprocessing to model training, evaluation, and a Streamlit web application for batch predictions.
+A machine learning project that predicts customer churn for a telecom company using the IBM Telco Customer Churn dataset. The project covers the full ML pipeline — from EDA and preprocessing to model training, evaluation, and a Streamlit web application for batch predictions. An Artificial Neural Network (ANN) built in PyTorch is also included as a deep learning extension.
 
 ---
 
@@ -18,6 +18,7 @@ customer-churn-predictor/
 │
 ├── Data_Visualization.ipynb       # EDA and preprocessing notebook
 ├── data_training.ipynb            # Model training and evaluation notebook
+├── ANN_on_customer_churning.ipynb # PyTorch ANN notebook (deep learning extension)
 ├── app.py                         # Streamlit web application
 │
 ├── Logistic_model.pkl             # Saved Logistic Regression model
@@ -25,6 +26,7 @@ customer-churn-predictor/
 │
 ├── WA_Fn-UseC_-Telco-Customer-Churn.csv   # Raw dataset
 ├── Customer_Churn_Data_V2.csv             # Cleaned and encoded dataset
+├── Customer_Churn_Data_V3.csv             # Preprocessed dataset (encoded, used for ANN)
 │
 ├── requirements.txt               # Python dependencies
 └── README.md                      # Project documentation
@@ -70,6 +72,7 @@ customer-churn-predictor/
 | Logistic Regression | 0.737 | 0.503 | **0.794** | 0.616 | **0.832** |
 | Random Forest (tuned) | 0.760 | 0.537 | 0.693 | 0.605 | 0.826 |
 | XGBoost (tuned) | 0.721 | 0.483 | 0.717 | 0.577 | 0.814 |
+| ANN (PyTorch) | 0.761 | — | — | — | — |
 
 ### 6. Hyperparameter Tuning
 - `RandomizedSearchCV` with 5-fold cross validation
@@ -81,6 +84,43 @@ customer-churn-predictor/
 - Highest recall (0.794) — catches the most churners
 - Best AUC (0.832)
 - For churn detection, missing a churner is more costly than a false alarm
+
+---
+
+## Deep Learning Extension — PyTorch ANN
+
+As a deep learning extension, an Artificial Neural Network was built from scratch in PyTorch on the same Telco dataset (`Customer_Churn_Data_V3.csv`).
+
+### Architecture
+
+```
+Input (40) → Linear → ReLU → Dropout(0.3) → Linear → ReLU → Dropout(0.3) → Linear → Sigmoid → Output (1)
+              40→32                           32→16                           16→1
+```
+
+### PyTorch Pipeline
+
+- **Tensor conversion**: NumPy arrays converted to `torch.float32` tensors; target reshaped to `(n, 1)`
+- **DataLoader**: `batch_size=32`, `shuffle=True` for training; no shuffle for test
+- **Loss function**: `nn.BCELoss()` (Binary Cross Entropy)
+- **Optimizer**: `Adam` with `lr=0.001`
+- **Regularization**: `nn.Dropout(p=0.3)` after each hidden layer to prevent overfitting
+- **Training**: 100 epochs with average epoch loss tracking
+- **Evaluation**: `model.eval()` + `torch.no_grad()` for inference
+
+### ANN Experiment Results
+
+| Model | Architecture | LR | Epochs | Accuracy |
+|---|---|---|---|---|
+| ChurnANN v1 | 40→11→6→1 | 0.001 | 50 | 73.7% |
+| ChurnANN v2 | 40→32→16→1 | 0.0001 | 100 | 74.7% |
+| ChurnANN v3 (Dropout) | 40→32→16→1 | 0.001 | 100 | **76.1%** ✅ |
+
+### Key Observations
+
+- Dropout regularization was critical — without it, training loss collapsed to near zero (overfitting) while test accuracy stayed flat
+- Average epoch loss (across all batches) gave a much cleaner convergence signal than single-batch loss
+- Logistic Regression still outperforms ANN on recall and AUC for this dataset — ANN requires significantly more data to generalize better than classical ML on small tabular datasets (~7,000 rows)
 
 ---
 
@@ -145,6 +185,7 @@ MultipleLines_Yes
 
 - **Language**: Python 3.11
 - **ML**: scikit-learn, XGBoost, imbalanced-learn
+- **DL**: PyTorch
 - **Data**: pandas, numpy
 - **Visualization**: matplotlib, seaborn
 - **Deployment**: Streamlit
