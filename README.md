@@ -72,7 +72,7 @@ customer-churn-predictor/
 | Logistic Regression | 0.737 | 0.503 | **0.794** | 0.616 | **0.832** |
 | Random Forest (tuned) | 0.760 | 0.537 | 0.693 | 0.605 | 0.826 |
 | XGBoost (tuned) | 0.721 | 0.483 | 0.717 | 0.577 | 0.814 |
-| ANN (PyTorch) | 0.761 | — | — | — | — |
+| ANN (PyTorch) | 0.761 | 0.530 | 0.650 | 0.580 | 0.719 |
 
 ### 6. Hyperparameter Tuning
 - `RandomizedSearchCV` with 5-fold cross validation
